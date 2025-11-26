@@ -1,0 +1,22 @@
+package com.samreact.GoldenRoyalEmail.data.enums;
+
+
+public enum BlogCategory {
+
+    CORPORATE_LAW,
+    CRIMINAL_LAW,
+    FAMILY_LAW,
+    REAL_ESTATE_LAW,
+    EMPLOYMENT_LAW,
+    PERSONAL_INJURY,
+    INTELLECTUAL_PROPERTY,
+    IMMIGRATION_LAW,
+    TAX_LAW,
+    ESTATE_PLANNING,
+    CONSTITUTIONAL_LAW,
+    ENVIRONMENTAL_LAW,
+    BANKRUPTCY_LAW,
+    LEGAL_NEWS,
+    OTHER
+}
+

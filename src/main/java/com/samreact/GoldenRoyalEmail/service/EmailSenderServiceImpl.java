@@ -1,25 +1,24 @@
-package com.samreact.GoldenRoyalEmail;
+package com.samreact.GoldenRoyalEmail.service;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EmailSenderService {
+public class EmailSenderServiceImpl implements EmailSenderService {
     private final JavaMailSender mailSender;
     private final String recipient;
 
-    public EmailSenderService(JavaMailSender mailSender,
-                              @Value("${FIRM_EMAIL: samueladeleke302@gmail.com}") String recipient) {
+    public EmailSenderServiceImpl(JavaMailSender mailSender,
+                                   @Value("${firm.recipient}") String recipient) {
         this.mailSender = mailSender;
         this.recipient = recipient;
     }
 
+    @Override
     public void sendContactHtml(String name, String fromEmail, String messageBody) throws MessagingException {
         MimeMessage mime = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mime, false, "UTF-8");

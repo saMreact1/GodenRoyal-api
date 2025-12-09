@@ -40,7 +40,7 @@ public class Blog {
     @Column(nullable = false, length = 200)
     private String title;
     
-    @NotBlank(message = "Slug is required")
+//    @NotBlank(message = "Slug is required")
     @Size(max = 250, message = "Slug must not exceed 250 characters")
     @Column(nullable = false, unique = true, length = 250)
     private String slug;

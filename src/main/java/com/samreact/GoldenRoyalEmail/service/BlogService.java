@@ -6,13 +6,14 @@ import com.samreact.GoldenRoyalEmail.data.model.Blog;
 import com.samreact.GoldenRoyalEmail.dto.request.BlogRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @SuppressWarnings("NullableProblems")
 public interface BlogService {
     Blog createBlog(BlogRequest request);
-    Blog updateBlog(Long id, BlogRequest request);
+    Blog updateBlog(Long id, BlogRequest request, MultipartFile image);
     Blog getBlogById(Long id);
     Blog getBlogBySlug(String slug);
     void deleteBlog(Long id);

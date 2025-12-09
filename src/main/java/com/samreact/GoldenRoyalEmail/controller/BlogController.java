@@ -14,8 +14,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -28,23 +30,35 @@ import java.util.List;
 public class BlogController {
     
     private final BlogService blogService;
-    
-    @PostMapping
-    public ResponseEntity<BlogResponse> createBlog(@Valid @RequestBody BlogRequest request) {
-        log.info("Creating blog with title: {}", request.title());
+
+    @PostMapping(consumes = "multipart/form-data")
+    public ResponseEntity<BlogResponse> createBlog(@ModelAttribute BlogRequest request) {
+
         Blog blog = blogService.createBlog(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(BlogResponse.from(blog));
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(BlogResponse.from(blog));
     }
-    
-    @PutMapping("/{id}")
+
+//    @PutMapping("/{id}")
+//    public ResponseEntity<BlogResponse> updateBlog(
+//            @PathVariable Long id,
+//            @Valid @RequestBody BlogRequest request) {
+//        log.info("Updating blog with id: {}", id);
+//        Blog blog = blogService.updateBlog(id, request);
+//        return ResponseEntity.ok(BlogResponse.from(blog));
+//    }
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<BlogResponse> updateBlog(
             @PathVariable Long id,
-            @Valid @RequestBody BlogRequest request) {
-        log.info("Updating blog with id: {}", id);
-        Blog blog = blogService.updateBlog(id, request);
+            @RequestPart("data") BlogRequest request,
+            @RequestPart(value = "image", required = false) MultipartFile image) {
+
+        Blog blog = blogService.updateBlog(id, request, image);
         return ResponseEntity.ok(BlogResponse.from(blog));
     }
-    
+
     @GetMapping("/{id}")
     public ResponseEntity<BlogResponse> getBlogById(@PathVariable Long id) {
         Blog blog = blogService.getBlogById(id);

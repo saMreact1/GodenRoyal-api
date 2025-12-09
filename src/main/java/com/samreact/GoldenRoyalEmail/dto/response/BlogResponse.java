@@ -22,6 +22,11 @@ public record BlogResponse(
     LocalDateTime updatedAt
 ) {
     public static BlogResponse from(Blog blog) {
+        String imageUrl = blog.getFeaturedImage();
+        if (imageUrl != null && !imageUrl.startsWith("http")) {
+            imageUrl = "http://localhost:8080" + imageUrl;
+        }
+
         return new BlogResponse(
             blog.getId(),
             blog.getTitle(),
@@ -29,7 +34,7 @@ public record BlogResponse(
             blog.getSummary(),
             blog.getContent(),
             blog.getAuthor(),
-            blog.getFeaturedImage(),
+            imageUrl,
             blog.getCategory(),
             blog.getStatus(),
             blog.getPublishedAt(),

@@ -6,9 +6,9 @@ import com.samreact.GoldenRoyalEmail.data.model.Blog;
 import com.samreact.GoldenRoyalEmail.data.repository.BlogRepository;
 import com.samreact.GoldenRoyalEmail.dto.request.BlogRequest;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -162,11 +162,20 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     @Transactional
-    public void incrementViewCount(Long id) {
-        Blog blog = getBlogById(id);
+    public Blog incrementViewCount(Long id) {
+        Blog blog = blogRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Blog not found"));
+
         blog.incrementViewCount();
-        blogRepository.save(blog);
+        return blogRepository.save(blog);
     }
+
+//    @Transactional
+//    public void incrementViewCount(Long id) {
+//        Blog blog = getBlogById(id);
+//        blog.incrementViewCount();
+//        blogRepository.save(blog);
+//    }
 
     @Override
     public List<Blog> getTopViewedBlogs(int limit) {
@@ -176,6 +185,29 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public Page<Blog> getRecentPublishedBlogs(Pageable pageable) {
         return blogRepository.findRecentPublished(BlogStatus.PUBLISHED, pageable);
+    }
+
+    @Override
+    public String upload(MultipartFile file) {
+        try {
+            String originalFilename = file.getOriginalFilename();
+            String extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+
+            String filename = "blog-" + System.currentTimeMillis() + ".jpg";
+            String uploadPath = "uploads/" + filename;
+
+            // Convert & enhance the image
+            Thumbnails.of(file.getInputStream())
+                    .size(1600, 1600)   // g
+                    .outputQuality(0.9) // 90% quality (sweet spot)
+                    .outputFormat("jpg")
+                    .toFile(uploadPath);
+
+            return "/uploads/" + filename;
+
+        } catch (Exception e) {
+            throw new RuntimeException("Image upload failed", e);
+        }
     }
 }
 

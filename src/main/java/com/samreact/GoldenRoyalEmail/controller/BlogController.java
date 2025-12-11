@@ -90,7 +90,13 @@ public class BlogController {
             .map(BlogResponse::from);
         return ResponseEntity.ok(blogs);
     }
-    
+
+    @GetMapping("/{id}/view")
+    public ResponseEntity<BlogResponse> viewBlog(@PathVariable Long id) {
+        Blog blog = blogService.incrementViewCount(id);
+        return ResponseEntity.ok(BlogResponse.from(blog));
+    }
+
     @GetMapping("/status/{status}")
     public ResponseEntity<Page<BlogResponse>> getBlogsByStatus(
             @PathVariable BlogStatus status,

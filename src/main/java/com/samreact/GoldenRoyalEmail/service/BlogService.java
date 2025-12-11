@@ -23,8 +23,10 @@ public interface BlogService {
     Page<Blog> searchBlogs(String keyword, Pageable pageable);
     Blog publishBlog(Long id);
     Blog archiveBlog(Long id);
-    void incrementViewCount(Long id);
+    Blog incrementViewCount(Long id);
     List<Blog> getTopViewedBlogs(int limit);
     Page<Blog> getRecentPublishedBlogs(Pageable pageable);
+
+    String upload(MultipartFile file);
 }
 
